@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="St25App.Pages.EditMemoryRowPage"
+             Title="Edit">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Save" Clicked="Save_Clicked"/>
+    </ContentPage.ToolbarItems>
+    
+    <Grid>
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Label Text="Raw data update" HorizontalOptions="Center" FontSize="18"/>
+            <Label Grid.Row="1" Text="(32 bits hexadecimal format)" HorizontalOptions="Center" FontSize="18"/>
+            <Label Grid.Row="2" Text="{Binding SelectedRow.AddressStr}" HorizontalOptions="Center" FontSize="18" Margin="0,20,0,0"/>
+
+            <Grid Grid.Row="3" HorizontalOptions="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Entry Text="{Binding SelectedRow.Byte1Hex}" WidthRequest="50" HorizontalTextAlignment="Center"/>
+                <Label Grid.Row="1" Text="Byte 0" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"/>
+
+                <Entry Grid.Column="1" Text="{Binding SelectedRow.Byte2Hex}" WidthRequest="50" HorizontalTextAlignment="Center"/>
+                <Label Grid.Column="1" Grid.Row="1" Text="Byte 1" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"/>
+
+                <Entry Grid.Column="2" Text="{Binding SelectedRow.Byte3Hex}" WidthRequest="50" HorizontalTextAlignment="Center"/>
+                <Label Grid.Column="2" Grid.Row="1" Text="Byte 2" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center" />
+
+                <Entry Grid.Column="3" Text="{Binding SelectedRow.Byte4Hex}" WidthRequest="50" HorizontalTextAlignment="Center"/>
+                <Label Grid.Column="3" Grid.Row="1" Text="Byte 3" FontSize="16" FontAttributes="Bold" HorizontalOptions="Center"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</ContentPage>

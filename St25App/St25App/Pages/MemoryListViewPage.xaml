@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="St25App.Pages.MemoryListViewPage"
+             Title="Memory">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Label Text="Start: "/>
+            <Entry Grid.Column="1" Text="{Binding Start}" Keyboard="Numeric" WidthRequest="150"/>
+
+            <Label Grid.Row="1" Text="Number of Items: "/>
+            <Entry Grid.Row="1" Grid.Column="1" Text="{Binding NumberOfBytes}" Keyboard="Numeric" WidthRequest="150"/>
+
+            <Button Grid.Row="2" Grid.ColumnSpan="2" Text="Read" Command="{Binding ReadMemoryCommand}" Margin="0,5,0,5"/>
+        </Grid>
+
+        <Label Grid.Row="1" Text="[Long press on a row for edit]" FontAttributes="Italic" FontSize="13" HorizontalOptions="Center" Margin="0,5,0,10" Opacity="{Binding ShowEditHint}"/>
+
+        <ListView Grid.Row="2" ItemsSource="{Binding Rows}" CachingStrategy="RecycleElement" RowHeight="25" Footer="">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <ViewCell.ContextActions>
+                            <MenuItem Text="Edit" CommandParameter="{Binding .}" Clicked="EditMenuItem_Clicked"/>
+                        </ViewCell.ContextActions>
+                        <StackLayout Orientation="Horizontal" Margin="10,0,0,0" VerticalOptions="Center">
+                            <Label Text="{Binding AddressStr}" WidthRequest="100" FontSize="16"/>
+                            <Label FontSize="16" TextColor="Black">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding Byte1Hex, StringFormat=' {0} '}"/>
+                                        <Span Text="{Binding Byte2Hex, StringFormat=' {0} '}"/>
+                                        <Span Text="{Binding Byte3Hex, StringFormat=' {0} '}"/>
+                                        <Span Text="{Binding Byte4Hex, StringFormat=' {0} '}"/>
+                                        <Span Text="{Binding Byte1Char, StringFormat='       {0}'}"/>
+                                        <Span Text="{Binding Byte2Char, StringFormat='{0}'}"/>
+                                        <Span Text="{Binding Byte3Char, StringFormat='{0}'}"/>
+                                        <Span Text="{Binding Byte4Char, StringFormat='{0}'}"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.FooterTemplate>
+                <DataTemplate>
+                    <BoxView HeightRequest="200"/>
+                </DataTemplate>
+            </ListView.FooterTemplate>
+        </ListView>
+
+        <Button Grid.Row="2" Text="Clear Memory" Command="{Binding ClearMemoryCommand}" VerticalOptions="End" Margin="20" TextColor="White" BackgroundColor="Red" CornerRadius="{OnPlatform Android=100, iOS=25}" HeightRequest="50"/>
+    </Grid>
+</ContentPage>

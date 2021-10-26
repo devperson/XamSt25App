@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="St25App.Pages.MainPage"
+             Title="ST25 App">
+
+    <Grid>
+        <Grid BackgroundColor="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Label Text="Please tap an NFC tag..." FontSize="26" TextColor="Brown" Margin="20" HorizontalOptions="Center"/>
+
+            <Grid Grid.Row="1" IsVisible="{Binding IsNfcDisabled}" HorizontalOptions="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Text="NFC currently disabled. Please click Enable NFC"/>
+                <Button Grid.Row="1" Text="Enable NFC" Command="{Binding EnableNfcCommand}"/>
+            </Grid>
+        </Grid>
+
+        <Grid IsVisible="{Binding HasTag}" BackgroundColor="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackLayout Margin="20">
+                <Label Text="{Binding TagInfo.Name}" FontSize="26" FontAttributes="Bold" TextColor="CornflowerBlue" HorizontalOptions="Center"/>
+                <Label Text="{Binding TagInfo.Description}" FontSize="18" HorizontalOptions="Center"/>
+
+                <Label Margin="0,40,0,0">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Manufacturer: " FontAttributes="Bold" FontSize="15"/>
+                            <Span Text="{Binding TagInfo.Manufacturer}" FontSize="15"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                
+                <Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="UID: " FontAttributes="Bold" FontSize="15"/>
+                            <Span Text="{Binding TagInfo.mUID}" FontSize="15"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <Label>
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Memory size (bytes): " FontAttributes="Bold" FontSize="15"/>
+                            <Span Text="{Binding TagInfo.SizeInBytes, StringFormat='{0} bytes'}" FontSize="15"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Tech list: " FontAttributes="Bold" FontSize="15" />
+                    <Label Text="{Binding TagInfo.TechListStr}" FontSize="15" />
+                </StackLayout>
+                
+            </StackLayout>
+
+            <Button Grid.Row="1" Text="Read/Write Memory" Command="{Binding ShowReadWriteMemPageCommand}" WidthRequest="300" HorizontalOptions="Center"/>
+        </Grid>
+    </Grid>
+
+</ContentPage>
