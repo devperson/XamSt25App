@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:c="clr-namespace:St25App.Controls"
+             x:Class="St25App.Pages.TapTagPage">
+    <Grid BackgroundColor="White">
+        <Label Text="Please tap an NFC tag..." FontSize="26" TextColor="Brown" Margin="20" HorizontalOptions="Center"/>
+
+        <c:LoadingControl />
+    </Grid>
+</ContentPage>

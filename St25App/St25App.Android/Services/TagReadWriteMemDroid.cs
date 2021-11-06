@@ -72,11 +72,17 @@ namespace St25App.Droid.Services
                 var addrRow = mStartAddress + pos * Constants.NBR_OF_BYTES_PER_RAW;
 
                 if (addrRow < 10)                
-                    row.AddressStr = $"Addr      {addrRow}: ";                
+                    row.AddressStr = $"Addr        {addrRow}: ";                
                 else if (addrRow > 10 && addrRow < 100)                
-                    row.AddressStr = $"Addr    {addrRow}: ";                
+                    row.AddressStr = $"Addr      {addrRow}: ";                
                 else if (addrRow >= 100 && addrRow < 1000)                
-                    row.AddressStr = $"Addr  {addrRow}: ";                
+                    row.AddressStr = $"Addr    {addrRow}: ";
+                else if (addrRow >= 1000 && addrRow < 10000)
+                    row.AddressStr = $"Addr   {addrRow}: ";
+                else if (addrRow >= 10000 && addrRow < 100000)
+                    row.AddressStr = $"Addr  {addrRow}: ";
+                else if (addrRow >= 100000 && addrRow < 1000000)
+                    row.AddressStr = $"Addr {addrRow}: ";
 
                 row.Position = pos * Constants.NBR_OF_BYTES_PER_RAW;
 
@@ -86,7 +92,7 @@ namespace St25App.Droid.Services
             return list;
         }
 
-        public async Task UpdateMemoryRowAsync(int mStartAddress, TagMemoryRow row)
+        public async Task<bool> UpdateMemoryRowAsync(int mStartAddress, TagMemoryRow row)
         {
             try
             {
@@ -101,6 +107,7 @@ namespace St25App.Droid.Services
 
                 row.Bytes[3] = Convert.ToSByte(row.Byte4Hex, 16);
                 row.Byte4Char = this.GetChar(row.Bytes[3]);
+
 
                 var nfcTag = TagListenerDroid.TagInfoDroid.NfcTag;
                 if (nfcTag is Type5Tag)
@@ -118,17 +125,76 @@ namespace St25App.Droid.Services
                         // Type 5                    
                         var bytes = row.Bytes.Select(b => (byte)b).ToArray();
                         await Task.Run(() => nfcTag.WriteBytes(mStartAddress + row.Position, bytes));
+
+                        TagListenerDroid.ShowBlackToast("Memory saved!");
+
+                        return true;
                     }
                 }
             }
             catch (STException e)
             {
                 System.Diagnostics.Debug.WriteLine(e);
-                TagListenerDroid.ShowBlackToast(e.Error.ToString());                
+                TagListenerDroid.ShowBlackToast(e.Error.ToString());
             }
+
+            return false;
         }
 
-        public async Task ClearMemoryAsync()
+        public async Task<bool> UpdateMemoryRowsAsync(int mStartAddress, List<TagMemoryRow> rows)
+        {
+            try
+            {
+                foreach (var row in rows)
+                {
+                    row.Bytes[0] = Convert.ToSByte(row.Byte1Hex, 16);
+                    row.Byte1Char = this.GetChar(row.Bytes[0]);
+
+                    row.Bytes[1] = Convert.ToSByte(row.Byte2Hex, 16);
+                    row.Byte2Char = this.GetChar(row.Bytes[1]);
+
+                    row.Bytes[2] = Convert.ToSByte(row.Byte3Hex, 16);
+                    row.Byte3Char = this.GetChar(row.Bytes[2]);
+
+                    row.Bytes[3] = Convert.ToSByte(row.Byte4Hex, 16);
+                    row.Byte4Char = this.GetChar(row.Bytes[3]);
+                }
+               
+
+                var nfcTag = TagListenerDroid.TagInfoDroid.NfcTag;
+                if (nfcTag is Type5Tag)
+                {
+                    var mAreaId = await Task.Run(() => getAreaIdFromAddressInBytesForType5Tag(nfcTag, mStartAddress));
+
+                    if (mAreaId == -1)
+                    {
+                        // An issue occured retrieving AreaId from Address
+                        // Address is probably invalid                        
+                        TagListenerDroid.ShowBlackToast("Invalid AreaId value!");
+                    }
+                    else
+                    {
+                        // Type 5                    
+                        var bytes = rows.SelectMany(r => r.Bytes).Select(b => (byte)b).ToArray();
+                        var firstRow = rows.First();
+                        await Task.Run(() => nfcTag.WriteBytes(mStartAddress + firstRow.Position, bytes));
+
+                        TagListenerDroid.ShowBlackToast("Memory saved!");
+
+                        return true;
+                    }
+                }
+            }
+            catch (STException e)
+            {
+                System.Diagnostics.Debug.WriteLine(e);
+                TagListenerDroid.ShowBlackToast(e.Error.ToString());
+            }
+
+            return false;
+        }
+
+        public async Task<bool> ClearMemoryAsync()
         {
             try
             {
@@ -139,13 +205,18 @@ namespace St25App.Droid.Services
                     nfcTag.WriteBytes(0, emptyByteArray);
 
                     InvalidateCache(nfcTag);
-                });                
+                });
+
+                TagListenerDroid.ShowBlackToast("Memory cleared!");
+                return true;
             }
             catch(STException e)
             {
                 System.Diagnostics.Debug.WriteLine(e);
                 TagListenerDroid.ShowBlackToast(e.Error.ToString());
             }
+
+            return false;
         }
 
         private async Task<byte[]> ReadRangeAsync(int mStartAddress, int mNumberOfBytes)

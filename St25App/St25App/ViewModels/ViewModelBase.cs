@@ -21,7 +21,7 @@ namespace St25App.ViewModels
         protected IPageDialogService PageDialogService { get; }
         public string Title { get; set; }
         public bool IsBusy { get; set; }
-
+        public string LoadingText { get; set; }
 
         public virtual void Initialize(INavigationParameters parameters)
         {

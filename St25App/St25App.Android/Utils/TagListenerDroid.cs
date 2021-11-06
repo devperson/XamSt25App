@@ -149,7 +149,7 @@ namespace St25App.Droid.Utils
 
 								System.Diagnostics.Debug.WriteLine(tagInfo);
 
-								App.TagDiscoveredAction(tagInfo);
+								App.OnTagDiscovered(tagInfo);
 							}
 							else
                             {

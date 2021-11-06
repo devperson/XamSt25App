@@ -9,7 +9,8 @@ namespace St25App.Services
     public interface ITagReadWriteMemory
     {
         Task<List<TagMemoryRow>> GetMemoryRowsAsync(int mStartAddress, int mNumberOfBytes);
-        Task UpdateMemoryRowAsync(int mStartAddress, TagMemoryRow row);
-        Task ClearMemoryAsync();
+        Task<bool> UpdateMemoryRowAsync(int mStartAddress, TagMemoryRow row);
+        Task<bool> UpdateMemoryRowsAsync(int mStartAddress, List<TagMemoryRow> rows);
+        Task<bool> ClearMemoryAsync();
     }
 }

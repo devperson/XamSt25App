@@ -25,12 +25,16 @@ namespace St25App
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {            
             containerRegistry.RegisterForNavigation<NavigationPage>();
-            containerRegistry.RegisterForNavigation<MainPage, MainViewModel>();
-            containerRegistry.RegisterForNavigation<MemoryListViewPage, MemoryListViewModel>();
-            containerRegistry.RegisterForNavigation<EditMemoryRowPage, EditMemoryRowViewModel>();            
+            containerRegistry.RegisterForNavigation<MainPage, MainViewModel>();            
+            containerRegistry.RegisterForNavigation<TapTagPage, TapTagViewModel>();
         }
 
-        public static Action<TagInfo> TagDiscoveredAction { get; set; }
+        public static event EventHandler<TagInfo> TagDiscoveredEvent;        
         public static Action NfcDisabledAction { get; set; }
+
+        public static void OnTagDiscovered(TagInfo e)
+        {
+            TagDiscoveredEvent.Invoke(null, e);
+        }
     }
 }
