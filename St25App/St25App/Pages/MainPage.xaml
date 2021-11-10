@@ -27,6 +27,7 @@
         <Grid IsVisible="{Binding HasTag}" BackgroundColor="White">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition />
             </Grid.RowDefinitions>
             <StackLayout Margin="20">
@@ -66,7 +67,12 @@
                 </StackLayout>
             </StackLayout>
 
-            <ListView Grid.Row="1" ItemsSource="{Binding Rows}" CachingStrategy="RecycleElement" RowHeight="50" Footer="" SelectionMode="None">
+            <StackLayout Grid.Row="1" Orientation="Horizontal" Margin="15,0,0,10">
+                <Label Text="Read full memory"/>
+                <Switch IsToggled="{Binding UseFullMemory}"/>
+            </StackLayout>
+
+            <ListView Grid.Row="2" ItemsSource="{Binding Rows}" CachingStrategy="RecycleElement" RowHeight="50" Footer="" SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -99,7 +105,7 @@
                 </ListView.FooterTemplate>
             </ListView>
 
-            <Grid Grid.Row="1" Margin="20" VerticalOptions="End">
+            <Grid Grid.Row="2" Margin="20" VerticalOptions="End">
                 <Button Text="Save Memory" Command="{Binding SaveMemoryCommand}" HorizontalOptions="End" TextColor="White" BackgroundColor="Green" CornerRadius="{OnPlatform Android=100, iOS=25}"  WidthRequest="150" HeightRequest="50"/>
                 <Button Text="Clear Memory" Command="{Binding ClearMemoryCommand}" FontSize="12" HorizontalOptions="Start" TextColor="White" BackgroundColor="Red" CornerRadius="{OnPlatform Android=100, iOS=25}" WidthRequest="100" HeightRequest="50"/>
             </Grid>

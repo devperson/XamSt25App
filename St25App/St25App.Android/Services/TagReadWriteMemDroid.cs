@@ -124,7 +124,7 @@ namespace St25App.Droid.Services
                     {
                         // Type 5                    
                         var bytes = row.Bytes.Select(b => (byte)b).ToArray();
-                        await Task.Run(() => nfcTag.WriteBytes(mStartAddress + row.Position, bytes));
+                        await Task.Run(() => nfcTag.WriteBytes(mStartAddress, bytes));
 
                         TagListenerDroid.ShowBlackToast("Memory saved!");
 
@@ -177,7 +177,7 @@ namespace St25App.Droid.Services
                         // Type 5                    
                         var bytes = rows.SelectMany(r => r.Bytes).Select(b => (byte)b).ToArray();
                         var firstRow = rows.First();
-                        await Task.Run(() => nfcTag.WriteBytes(mStartAddress + firstRow.Position, bytes));
+                        await Task.Run(() => nfcTag.WriteBytes(mStartAddress, bytes));
 
                         TagListenerDroid.ShowBlackToast("Memory saved!");
 

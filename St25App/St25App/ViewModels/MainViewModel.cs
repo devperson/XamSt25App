@@ -39,6 +39,8 @@ namespace St25App.ViewModels
         public DelegateCommand ClearMemoryCommand { get; set; }
         public DelegateCommand SaveMemoryCommand { get; set; }
         public List<TagMemoryRow> Rows { get; set; }
+        public bool UseFullMemory { get; set; }
+        
 
         public override void Initialize(INavigationParameters parameters)
         {
@@ -57,7 +59,17 @@ namespace St25App.ViewModels
             this.IsBusy = true;
 
             this.TagInfo = e;
-            this.Rows = await tagReadWriteMemService.GetMemoryRowsAsync(0, e.SizeInBytes);
+
+            var from = 59;
+            var to = 16;
+
+            if(UseFullMemory)
+            {
+                from = 0;
+                to = e.SizeInBytes;
+            }
+
+            this.Rows = await tagReadWriteMemService.GetMemoryRowsAsync(from, to);
 
             this.IsBusy = false;            
         }
@@ -117,9 +129,12 @@ namespace St25App.ViewModels
 
         private async void OnSaveMemoryCommand()
         {
+            var from = 60;
+            if (UseFullMemory)
+                from = 0;
             Func<Task<bool>> func = async () =>
             {
-               return await tagReadWriteMemService.UpdateMemoryRowsAsync(0, Rows);
+                return await tagReadWriteMemService.UpdateMemoryRowsAsync(from, Rows);
             };
 
             LoadingText = "Saving memory...";
